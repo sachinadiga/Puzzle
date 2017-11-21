@@ -117,6 +117,10 @@ class FifteenPuzzle extends JPanel {
     
     }
 
+    /*
+    *   Lazy Initialization Of the Object,
+    *   Gets intiaized only when it is first Enquired
+    */
     public static FifteenPuzzle getInstance(){
         if(FifteenObject == null){
             FifteenObject = new FifteenPuzzle();

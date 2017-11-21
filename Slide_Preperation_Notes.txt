@@ -1,5 +1,45 @@
 Creational Pattern:
+	Builder Pattern:
 	* Separate the construction of a complex object from its representation so that the same construction process 		can create different representations.
 	* Parse a complex representation, create one target.
 
+	newGame() {
+		do {
+            reset();
+            shuffle();  
+        } while (!isSolvable());
+    }
+
 	In our application needs to create the Game Object. The specification for the game are predefined, So when the user need the game to be built we can call the builder method that handles Creation of Game Object(Target).
+
+	Singleton Pattern:
+	*Ensure a class has only one instance, and provide a global point of access to it.
+	*Encapsulated "just-in-time initialization" or "initialization on first use".
+
+	public static FifteenPuzzle getInstance(){
+        if(FifteenObject == null){
+            FifteenObject = new FifteenPuzzle();
+        }
+        return FifteenObject;
+    }
+
+    In our application only one Game Object shouold be present. Which is achieved by restricting access to Creation of Object. Nothing but Singleton Pattern
+
+------------
+
+Structural:
+	Decorator:
+	*Attach additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality.
+
+	In our application we are Decorating the tiles with different Colors Based on the State of the tile,State of the Board.And we are decorating the the Board itself
+
+----------
+
+Behavioural:
+	State Pattern:
+	*Allow an object to alter its behavior when its internal state changes. The object will appear to change its class.
+	*The State pattern is a solution to the problem of how to make behavior depend on state.
+
+	boolean gameOver = true;
+
+	In our application we are Keeping track of State that is won and state that is not yet finished..Once the state of the board is "Won". i.e "true" , the object changes to newGame .
