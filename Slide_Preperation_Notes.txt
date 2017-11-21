@@ -1,0 +1,5 @@
+Creational Pattern:
+	* Separate the construction of a complex object from its representation so that the same construction process 		can create different representations.
+	* Parse a complex representation, create one target.
+
+	In our application needs to create the Game Object. The specification for the game are predefined, So when the user need the game to be built we can call the builder method that handles Creation of Game Object(Target).

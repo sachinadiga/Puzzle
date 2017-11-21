@@ -7,13 +7,13 @@ class FifteenPuzzle extends JPanel {
  
     private final int side = 3;
     private final int numTiles = side * side - 1;
- 	/*
- 	*	Generating a rand variable for getting random numbers for shuffling tiles
- 	*	tiles[] is used to keep track of the number in that tile in current state
- 	*	tileSize, blankPos,margin,gridSize are for GUI purpose
- 	*
- 	*	gameOver is for knowing the Game State.
- 	*/
+    /*
+    *   Generating a rand variable for getting random numbers for shuffling tiles
+    *   tiles[] is used to keep track of the number in that tile in current state
+    *   tileSize, blankPos,margin,gridSize are for GUI purpose
+    *
+    *   gameOver is for knowing the Game State.
+    */
     private final Random rand = new Random();
     private final int[] tiles = new int[numTiles + 1];
     private final int tileSize;
@@ -22,7 +22,13 @@ class FifteenPuzzle extends JPanel {
     private final int gridSize;
     private boolean gameOver; //State Pattern
  
+    /*
+    *   Singleton Pattern,making constructor private
+    *   Restricting the creation of Objects ( One Here )
+    */
+    public static FifteenPuzzle FifteenObject = null;
     private FifteenPuzzle() {
+        
         final int dim = 640;//Initializing the board to 640 px
  
         margin = 80; 
@@ -34,23 +40,23 @@ class FifteenPuzzle extends JPanel {
         setForeground(new Color(0x6495ED)); // cornflowerblue
         setFont(new Font("SansSerif", Font.BOLD, 60));
  
-        gameOver = true;	//Initializing State to True
+        gameOver = true;    //Initializing State to True
  
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 /*
-				*	State Pattern
-				*	gameOver keeps track of state
+                *   State Pattern
+                *   gameOver keeps track of state
                 */
                 if (gameOver) {
                     newGame();
  
                 } else {
- 					/*
- 					*	Gets the coordinates of the click on the game board
- 					*	Check if the positiin of click is in gridSize
- 					*/
+                    /*
+                    *   Gets the coordinates of the click on the game board
+                    *   Check if the positiin of click is in gridSize
+                    */
                     int ex = e.getX() - margin;
                     int ey = e.getY() - margin;
  
@@ -59,31 +65,31 @@ class FifteenPuzzle extends JPanel {
                     }
 
                     /*
-                    *	Checks if the click is on the board, which tile is being targeted by user
+                    *   Checks if the click is on the board, which tile is being targeted by user
                     */
                     int c1 = ex / tileSize;
                     int r1 = ey / tileSize;
 
                     /*
-                    *	Getting coordinates of blank Positions
-                    *	blankPos is the variable which keeps track of the position of the balnk when state changes
+                    *   Getting coordinates of blank Positions
+                    *   blankPos is the variable which keeps track of the position of the balnk when state changes
                     */
                     int c2 = blankPos % side;
                     int r2 = blankPos / side;
 
                     /*
-                    *	Reach Exact position of the click, i.e reaching tiles[clikedPosition]
-                    *	Now tiles[clikedPosition] returns the number on which user has clicked
+                    *   Reach Exact position of the click, i.e reaching tiles[clikedPosition]
+                    *   Now tiles[clikedPosition] returns the number on which user has clicked
                     */
                     int clickPos = r1 * side + c1;
  
                     int dir = 0; //Indicates how many tiles to shift
                     /*
-                    *	If the clicked Position is itself blank, then do nothing i.e dir=0
-                    *	If the clicked position and blank position are in same column, then dir = Math.abs(r1-r2)
-                    *		indicating how far is the blankSpace from the clicked position int the column
-                    *	If the clicked position and blank position are in same row, then dir = Math.abs(c1-c2)
-                    *		indicating how far is the blankSpace from the clicked position int the column
+                    *   If the clicked Position is itself blank, then do nothing i.e dir=0
+                    *   If the clicked position and blank position are in same column, then dir = Math.abs(r1-r2)
+                    *       indicating how far is the blankSpace from the clicked position int the column
+                    *   If the clicked position and blank position are in same row, then dir = Math.abs(c1-c2)
+                    *       indicating how far is the blankSpace from the clicked position int the column
                     */
                     if (c1 == c2 && Math.abs(r1 - r2) > 0) {
                         dir = (r1 - r2) > 0 ? side : -1*side;
@@ -96,29 +102,37 @@ class FifteenPuzzle extends JPanel {
                         do {
                             int newBlankPos = blankPos + dir;
                             tiles[blankPos] = tiles[newBlankPos];
-                            blankPos = newBlankPos;	//updating blankspace whenever move happens
+                            blankPos = newBlankPos; //updating blankspace whenever move happens
                         } while (blankPos != clickPos);
                         tiles[blankPos] = 0;
                     }
  
-                    gameOver = isSolved();	//Every time state changes , we check if the endState is reached
+                    gameOver = isSolved();  //Every time state changes , we check if the endState is reached
                 }
-                repaint();	//For every click
+                repaint();  //For every click
             }
         });
- 
-        newGame();	//every time game is solved
+        //FifteenObject = null;
+        newGame();  //every time game is solved
+    
     }
 
-	/*
-	*	Builder Pattern
-	*	Set of fixed method which leads to game development
-	*	And the final object ,output of the Builder method is Game Object
-	*/ 
+    public static FifteenPuzzle getInstance(){
+        if(FifteenObject == null){
+            FifteenObject = new FifteenPuzzle();
+        }
+        return FifteenObject;
+    }
+
+    /*
+    *   Builder Pattern
+    *   Set of fixed method which leads to game development
+    *   And the final object ,output of the Builder method is Game Object
+    */ 
     private void newGame() {
         do {
-            reset();	//First we need to allocate the tiles[] array to initial states, Which later can be shuffled
-            shuffle();	//The tiles should be shuffled first whenever a new game is being built
+            reset();    //First we need to allocate the tiles[] array to initial states, Which later can be shuffled
+            shuffle();  //The tiles should be shuffled first whenever a new game is being built
         } while (!isSolvable());
         gameOver = false;
     }
@@ -250,18 +264,5 @@ class FifteenPuzzle extends JPanel {
  
         drawGrid(g);
         drawStartMessage(g);
-    }
- 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame f = new JFrame();
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            f.setTitle("Fifteen Puzzle");
-            f.setResizable(false);
-            f.add(new FifteenPuzzle(), BorderLayout.CENTER);
-            f.pack();
-            f.setLocationRelativeTo(null);
-            f.setVisible(true);
-        });
     }
 }
