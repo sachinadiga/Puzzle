@@ -110,6 +110,11 @@ class FifteenPuzzle extends JPanel {
                     gameOver = isSolved();  //Every time state changes , we check if the endState is reached
                 }
                 repaint();  //For every click
+                /*
+                *	repaint() will call PaintComponent 
+                *	repaint is an inbuilt function of GUI
+                *	PaintComponent in turn calls DrawGrid where we are implementing the decorator pattern based on the state of tiles and whole board
+                */
             }
         });
         //FifteenObject = null;
@@ -166,9 +171,7 @@ class FifteenPuzzle extends JPanel {
         as an inversion. In our case, with the blank space in the home
         position, the number of inversions must be even for the puzzle
         to be solvable.
- 
-        See also:
-        www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
+
      */
     private boolean isSolvable() {
         int countInversions = 0;
@@ -194,6 +197,12 @@ class FifteenPuzzle extends JPanel {
         return true;
     }
  
+ 	/*
+ 	*	Decorator Pattern
+ 	*	When the tile gets in to its proper position it will decorated with the GREEN color
+ 	*	If more than half of the tiles are in correct positions then the user is towards winning stage
+ 	*		We are decorating the board to WHITE,else the board will be decorated with RED color
+ 	*/
     private void drawGrid(Graphics2D g) {
         int count=0;
         for (int i = 0; i < tiles.length; i++) {
